@@ -21,7 +21,6 @@ export class UserFlagsBitField extends BitField {
     static Flags = UserFlags;
 }
 
-
 /**
  * @name UserFlagsBitField
  * @kind constructor
@@ -35,4 +34,3 @@ export class UserFlagsBitField extends BitField {
  * @type {number}
  * @name UserFlagsBitField#bitfield
  */
-

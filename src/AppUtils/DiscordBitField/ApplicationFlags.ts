@@ -42,4 +42,3 @@ export class ApplicationFlagsBitField extends BitField {
  *
  * @typedef {string|number|ApplicationFlagsBitField|ApplicationFlagsResolvable[]} ApplicationFlagsResolvable
  */
-

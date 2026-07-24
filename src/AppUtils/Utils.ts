@@ -12,19 +12,13 @@ import { UserFlagsBitField } from "./DiscordBitField";
 import { BadgesBasedUserDataAndExtends as UserBadges } from "./UserBadges";
 
 export default class Util {
-    static guildMemberBios = new Map<string, string>();
-
-    static setGuildMemberBio (botId: string, guildId: string, bio: string) {
-        Util.guildMemberBios.set(`${botId}:${guildId}`, bio);
-    }
-
     static ProfilePatch (
         userData: APIUser,
         guildMember: APIGuildMember | null = null,
         guildId: string | null = null,
-        bio: string | null = null,
-        botId: string | null = null,
+        injectUserBio: string | null = null,
     ) {
+        const fakeBio = "<a:shiggy:1162436090775470160> Based on the cutest Discord client mod :3";
         const flags = new UserFlagsBitField(userData.flags);
         const badges: object[] = [];
         flags.toArray().map(element => {
@@ -48,6 +42,8 @@ export default class Util {
                     UserBadges.PremiumTenureV2(60),
                     UserBadges.LegacyUsername,
                     UserBadges.QuestCompleted,
+                    UserBadges.AprilFools2026,
+                    UserBadges.Gifting,
                 );
             }
         }
@@ -62,8 +58,14 @@ export default class Util {
 			badges.push(UserBadges.PREMIUM_TENURE(60));
 		}
 		*/
-        if (!bio && GlobalConfig.config.generate_fake_profile) {
-            bio = "<a:shiggy:1162436090775470160> Based on the cutest Discord client mod :3";
+        if (!injectUserBio && GlobalConfig.config.generate_fake_profile) {
+            injectUserBio = fakeBio;
+        }
+        let guildMemberProfileBio = null;
+        if (guildMember && "bio" in guildMember && guildMember.bio) {
+            guildMemberProfileBio = guildMember.bio;
+        } else if (injectUserBio) {
+            guildMemberProfileBio = injectUserBio;
         }
         return {
             application_role_connections: [],
@@ -74,7 +76,7 @@ export default class Util {
             guild_member_profile: guildMember && {
                 guild_id: guildId,
                 pronouns: "",
-                bio: (botId && guildId && Util.guildMemberBios.get(`${botId}:${guildId}`)) || "",
+                bio: guildMemberProfileBio,
                 banner: guildMember.banner,
                 accent_color: null,
                 theme_colors: null,
@@ -95,13 +97,16 @@ export default class Util {
             user_profile: {
                 accent_color: userData.accent_color,
                 banner: userData.banner,
-                bio,
+                bio: injectUserBio,
+                collectibles: [],
                 emoji: null,
                 popout_animation_particle_type: null,
                 profile_effect: null,
                 pronouns: null,
                 theme_colors: null,
             },
+            widgets: [],
+            wishlist_settings: {},
         };
     }
     static getIDFromToken (token = ""): string | null {
@@ -243,11 +248,7 @@ export default class Util {
         // 4. Electron -> Express
         electronReq.on("response", electronRes => {
             res.status(electronRes.statusCode);
-            const skipResHeaders = [
-                "content-encoding",
-                "content-length",
-                "transfer-encoding",
-            ];
+            const skipResHeaders = ["content-encoding", "content-length", "transfer-encoding"];
             Object.entries(electronRes.headers).forEach(([key, value]) => {
                 if (value && !skipResHeaders.includes(key.toLowerCase())) {
                     try {

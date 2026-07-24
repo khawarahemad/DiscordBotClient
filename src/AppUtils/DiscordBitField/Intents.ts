@@ -46,4 +46,3 @@ export class IntentsBitField extends BitField {
  *
  * @typedef {string|number|IntentsBitField|IntentsResolvable[]} IntentsResolvable
  */
-

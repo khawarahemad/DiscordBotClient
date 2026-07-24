@@ -285,4 +285,17 @@ export class BadgesBasedUserDataAndExtends extends BadgesNitro {
         description: "This server has {bot} Premium",
         icon: "d2010c413a8da2208b7e4f35bd8cd4ac",
     };
+    static AprilFools2026 = {
+        id: "april_fools_2026",
+        description: "Level 67 Reached",
+        icon: "ca105ad9cfc8580c765101d17bbb2323",
+    };
+    // Todo: add more badges here
+    static Gifting = {
+        id: "gifting",
+        description: "Gifting Champion",
+        icon: "8b7792c4f65953d3ff564f23429cb79e",
+        simple_icon_url:
+            "https://cdn.discordapp.com/assets/content/116450c5c914dd5159985f02db03cd1cd22edc1b4c58b1bc83cbe6797f8caffe.png",
+    };
 }

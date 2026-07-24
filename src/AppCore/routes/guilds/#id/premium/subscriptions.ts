@@ -39,12 +39,13 @@ app.get(
         }>,
         res,
     ) => {
-        return net.fetch("https://canary.discord.com/api/v9/guilds/" + req.params.id, {
-            headers: {
-                authorization: req.headers.authorization,
-                "user-agent": Constants.UserAgentDiscordBot,
-            } as Record<string, string>,
-        })
+        return net
+            .fetch("https://canary.discord.com/api/v9/guilds/" + req.params.id, {
+                headers: {
+                    authorization: req.headers.authorization,
+                    "user-agent": Constants.UserAgentDiscordBot,
+                } as Record<string, string>,
+            })
             .then(r => r.json() as Promise<APIGuild>)
             .then(object => {
                 if (object.premium_subscription_count && object.premium_subscription_count > 0) {

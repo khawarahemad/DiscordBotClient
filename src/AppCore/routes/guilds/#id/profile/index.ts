@@ -13,7 +13,7 @@ const app = Router({ mergeParams: true });
 
 // Ref: https://github.com/discord-userdoccers/discord-userdoccers/pull/346
 
-function convertGuildObjectToGuildProfileObject(guild: APIGuild & { code?: number }) {
+function convertGuildObjectToGuildProfileObject (guild: APIGuild & { code?: number }) {
     if (!guild.id && guild.code) {
         return {
             isError: true,
@@ -186,10 +186,10 @@ const callbackEditCurrentMember = (
     resCallback: Response,
 ) => {
     const guildId = reqCallback.params.id;
-    const botId = Util.getIDFromToken(reqCallback.headers.authorization);
     const body: Record<string, unknown> = {};
     if ("nick" in reqCallback.body) body.nick = reqCallback.body.nick;
     if ("avatar" in reqCallback.body) body.avatar = reqCallback.body.avatar;
+    if ("avatar_description" in reqCallback.body) body.avatar_description = reqCallback.body.avatar_description;
     if ("banner" in reqCallback.body) body.banner = reqCallback.body.banner;
     if ("bio" in reqCallback.body) body.bio = reqCallback.body.bio;
     net.fetch(`https://canary.discord.com/api/v10/guilds/${guildId}/members/@me`, {
@@ -203,7 +203,6 @@ const callbackEditCurrentMember = (
     })
         .then(r => r.json() as Promise<APIGuildMember>)
         .then(d => {
-            if ("bio" in body && botId) Util.setGuildMemberBio(botId, guildId, (body.bio as string) || "");
             return resCallback.send({
                 guild_id: guildId,
                 pronouns: "",

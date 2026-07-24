@@ -16,20 +16,25 @@ const logger = scope("APIServer");
 
 const app = express();
 
-if (Constants.VerboseAPIServerLogging) { app.use(
-    morgan("dev", {
-        stream: {
-            write: msg => logger.info(msg.replace(/\n/g, "")),
-        },
-    }),
-); }
+if (Constants.VerboseAPIServerLogging) {
+    app.use(
+        morgan("dev", {
+            stream: {
+                write: msg => logger.info(msg.replace(/\n/g, "")),
+            },
+        }),
+    );
+}
 
 const HttpsOptions = Util.generateSelfSignedCertificate();
 
-const server = https.createServer({
-    key: HttpsOptions.private,
-    cert: HttpsOptions.cert,
-}, app);
+const server = https.createServer(
+    {
+        key: HttpsOptions.private,
+        cert: HttpsOptions.cert,
+    },
+    app,
+);
 
 const ignoreHeaders = ["cookie", "sec-", "referer", "origin", "authorization", "host"];
 

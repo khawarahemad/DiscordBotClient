@@ -9,7 +9,7 @@ import { DiscordBotClient } from ".";
 import Constants from "./Constants";
 import { IPCEvent } from "./IPCEvents";
 
-export function setupIPCEvents(mainApp: DiscordBotClient) {
+export function setupIPCEvents (mainApp: DiscordBotClient) {
     const getWindow = (framename: string) => {
         return mainApp.childWindows.get(framename) ?? mainApp.win;
     };

@@ -131,7 +131,6 @@ export class DiscordBotClient extends EventEmitter {
                                     "indexdb",
                                     "localstorage",
                                     "shadercache",
-                                    "websql",
                                     "serviceworkers",
                                     "cachestorage",
                                 ],

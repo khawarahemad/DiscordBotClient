@@ -19,7 +19,7 @@ const mapCache = new Map<string, ThreadCacheEntry>();
 
 function getOrCreateCacheEntry (channelId: string): Set<number> {
     const existing = mapCache.get(channelId);
-    if (existing && (Date.now() - existing.createdAt) < CACHE_TTL_MS) {
+    if (existing && Date.now() - existing.createdAt < CACHE_TTL_MS) {
         return existing.timestamps;
     }
     // Evict expired entry or create new
@@ -34,58 +34,69 @@ function getOrCreateCacheEntry (channelId: string): Set<number> {
     return entry.timestamps;
 }
 
-app.all("/", async (req: Request<
-	{
-		id: string;
-	}, unknown, unknown, {
-		archived?: "true" | "false";
-		sort_by?: "last_message_time" | "archive_time" | "creation_time";
-		sort_order?: "asc" | "desc";
-		limit?: string;
-		tag_setting?: "include" | "exclude" | "only";
-		offset?: string;
-		name?: string;
-		tag?: string;
-	}>, res) => {
-    const channelId = req.params.id;
-    let { sort_by, sort_order } = req.query;
-    const { archived, tag_setting, name, tag, limit, offset } = req.query;
-    // Force set
-    sort_by = "archive_time";
-    sort_order = "desc";
-    if (tag || name) {
-        return res.send({
-            threads: [],
-            members: [],
-            has_more: false,
-            total_results: 0,
-            first_messages: [],
-        }); // Discord API limitation
-    }
-    let threads: APIPublicThreadChannel[] = [];
-    let members: APIThreadMember[] = [];
-    const first_messages: unknown[] = [];
-    const public_has_more = false;
-    const set = getOrCreateCacheEntry(channelId);
-    const before = Array.from(set)[Math.max((parseInt(offset || "0", 10) || 0) - 1, 0)];
-    if (archived === "true") {
-        const publicThread = await net.fetch(
-            `https://canary.discord.com/api/v9/channels/${channelId}/threads/archived/public?limit=${parseInt(limit || "25") || 25}${
-                before ? `&before=${new Date(before).toISOString()}` : ""
-            }`,
+app.all(
+    "/",
+    async (
+        req: Request<
             {
-                headers: {
-                    authorization: req.headers.authorization,
-                    "user-agent": Constants.UserAgentDiscordBot,
-                } as Record<string, string>,
+                id: string;
             },
-        ).then(r => r.json() as Promise<APIThreadList>);
-        threads = publicThread.threads as APIPublicThreadChannel[] || [];
-        members = publicThread.members || [];
-        // first_messages = publicThread.first_messages || [];
-        // public_has_more = publicThread.has_more || false;
-    }
-    /*
+            unknown,
+            unknown,
+            {
+                archived?: "true" | "false";
+                sort_by?: "last_message_time" | "archive_time" | "creation_time";
+                sort_order?: "asc" | "desc";
+                limit?: string;
+                tag_setting?: "include" | "exclude" | "only";
+                offset?: string;
+                name?: string;
+                tag?: string;
+            }
+        >,
+        res,
+    ) => {
+        const channelId = req.params.id;
+        let { sort_by, sort_order } = req.query;
+        const { archived, tag_setting, name, tag, limit, offset } = req.query;
+        // Force set
+        sort_by = "archive_time";
+        sort_order = "desc";
+        if (tag || name) {
+            return res.send({
+                threads: [],
+                members: [],
+                has_more: false,
+                total_results: 0,
+                first_messages: [],
+            }); // Discord API limitation
+        }
+        let threads: APIPublicThreadChannel[] = [];
+        let members: APIThreadMember[] = [];
+        const first_messages: unknown[] = [];
+        const public_has_more = false;
+        const set = getOrCreateCacheEntry(channelId);
+        const before = Array.from(set)[Math.max((parseInt(offset || "0", 10) || 0) - 1, 0)];
+        if (archived === "true") {
+            const publicThread = await net
+                .fetch(
+                    `https://canary.discord.com/api/v9/channels/${channelId}/threads/archived/public?limit=${parseInt(limit || "25") || 25}${
+                        before ? `&before=${new Date(before).toISOString()}` : ""
+                    }`,
+                    {
+                        headers: {
+                            authorization: req.headers.authorization,
+                            "user-agent": Constants.UserAgentDiscordBot,
+                        } as Record<string, string>,
+                    },
+                )
+                .then(r => r.json() as Promise<APIThreadList>);
+            threads = (publicThread.threads as APIPublicThreadChannel[]) || [];
+            members = publicThread.members || [];
+            // first_messages = publicThread.first_messages || [];
+            // public_has_more = publicThread.has_more || false;
+        }
+        /*
 	function sorting(a = 0, b = 0) {
 		if (sort_order === 'asc') {
 			return a > b ? 1 : a < b ? -1 : 0; // Ascending order
@@ -121,18 +132,19 @@ app.all("/", async (req: Request<
 		}
 	}
 	*/
-    for (let i = 0; i < threads.length; i++) {
-        const timestamp = threads[i].thread_metadata?.archive_timestamp ?? 0;
-        set.add(new Date(timestamp).getTime());
-    }
-    const finalData = {
-        threads: threads,
-        members,
-        has_more: public_has_more,
-        total_results: set.size,
-        first_messages,
-    };
-    res.send(finalData);
-});
+        for (let i = 0; i < threads.length; i++) {
+            const timestamp = threads[i].thread_metadata?.archive_timestamp ?? 0;
+            set.add(new Date(timestamp).getTime());
+        }
+        const finalData = {
+            threads: threads,
+            members,
+            has_more: public_has_more,
+            total_results: set.size,
+            first_messages,
+        };
+        res.send(finalData);
+    },
+);
 
 export default app;

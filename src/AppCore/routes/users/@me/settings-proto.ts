@@ -13,7 +13,7 @@ const app = Router({ mergeParams: true });
  * This avoids race conditions when multiple requests arrive simultaneously
  * by filtering on the uid so each request only gets its own response.
  */
-function waitForSettingsEvent(
+function waitForSettingsEvent (
     emitter: NodeJS.EventEmitter,
     eventName: string,
     uid: string,
