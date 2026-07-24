@@ -182,21 +182,22 @@ Logging in works via the UI on first startup of the application.
 
 - The versions removed from the table were unstable and did not work properly.
 
-| Discord Build     | Hash    | Vencord | Client version | Release Status | App Status |
-| ----------------- | ------- | ------- | -------------- | -------------- | ---------- |
-| Latest            | ?       | ?       | v3.9.?         | ~~Beta~~       | ℹ          |
-| Stable 510733     | 2fcef2a | v1.14.5 | v3.9.1         | Latest         | ✔          |
-| Stable 510733[^7] | 2fcef2a | v1.14.5 | v3.9.0[^8]     | EOL            | ⛔ ⚠       |
-| Stable 491153[^6] | 496afea | v1.14.1 | v3.8.3         | Deprecated     | ✔          |
-| Stable 479219     | 582c5bf | v1.13.8 | v3.8.2         | Deprecated     | ✔          |
-| Stable 453248     | 0a497ab | v1.13.1 | v3.8.1         | Deprecated     | ✔          |
-| Stable 415772     | 0c81c46 | v1.12.5 | v3.7.4         | EOL            | ✔ ⚠        |
-| Stable 403437     | fa5cfe9 | v1.12.2 | v3.7.2         | EOL            | ✔ ⚠        |
-| Stable 394055     | f598231 | v1.11.9 | v3.7.1         | EOL            | ✔ ⚠        |
-| Stable 391738     | 51404a7 | v1.11.9 | v3.7.0         | EOL            | ⛔ ⚠       |
-| Stable 360320     | 38aca73 | v1.10.9 | v3.6.2         | EOL            | ✔ ⚠        |
-| Stable 355624     | 8dc6074 | v1.10.9 | v3.6.1         | EOL            | ✔ ⚠        |
-| Stable 204762     | 78f82ba | v1.2.8  | v2.4.2         | EOL[^5]        | ✔ ⚠        |
+| Discord Build     | Hash    | Vencord  | Client version | Release Status | App Status |
+| ----------------- | ------- | -------- | -------------- | -------------- | ---------- |
+| Latest            | ?       | ?        | v3.9.?         | ~~Beta~~       | ℹ          |
+| Stable 582977     | 5ea1303 | v1.14.16 | v3.9.2         | Latest         | ✔          |
+| Stable 510733     | 2fcef2a | v1.14.5  | v3.9.1         | Deprecated     | ✔          |
+| Stable 510733[^7] | 2fcef2a | v1.14.5  | v3.9.0[^8]     | EOL            | ⛔ ⚠       |
+| Stable 491153[^6] | 496afea | v1.14.1  | v3.8.3         | EOL            | ✔ ⚠        |
+| Stable 479219     | 582c5bf | v1.13.8  | v3.8.2         | EOL            | ✔ ⚠        |
+| Stable 453248     | 0a497ab | v1.13.1  | v3.8.1         | EOL            | ✔ ⚠        |
+| Stable 415772     | 0c81c46 | v1.12.5  | v3.7.4         | EOL            | ✔ ⚠        |
+| Stable 403437     | fa5cfe9 | v1.12.2  | v3.7.2         | EOL            | ✔ ⚠        |
+| Stable 394055     | f598231 | v1.11.9  | v3.7.1         | EOL            | ✔ ⚠        |
+| Stable 391738     | 51404a7 | v1.11.9  | v3.7.0         | EOL            | ⛔ ⚠       |
+| Stable 360320     | 38aca73 | v1.10.9  | v3.6.2         | EOL            | ✔ ⚠        |
+| Stable 355624     | 8dc6074 | v1.10.9  | v3.6.1         | EOL            | ✔ ⚠        |
+| Stable 204762     | 78f82ba | v1.2.8   | v2.4.2         | EOL[^5]        | ✔ ⚠        |
 
 - ✔ – Fully functional and expected to be free of critical bugs.
 - ℹ – Supports at least basic functionality, but is still under development. Minor issues may occur.
@@ -209,7 +210,7 @@ Logging in works via the UI on first startup of the application.
 
 [^7]: The first version that supports the advanced message editor (beta), including support for Embeds and Components V1 & V2. Note: Support for interactive components is outside the scope of this project.
 
-[^8]: Version **3.9.0** cannot be used due to a login error *(if you have already logged in, you can still use it).*
+[^8]: Version **3.9.0** cannot be used due to a login error _(if you have already logged in, you can still use it)._
 
 ---
 
