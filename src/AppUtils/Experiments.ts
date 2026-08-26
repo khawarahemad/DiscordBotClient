@@ -68,14 +68,12 @@ function buildUserExperiment (obj: Record<string, string>, botId: string) {
     return arr;
 }
 
-export function UserExperiment (allData: unknown, botId: string) {
-    const experimentsToEvaluate: Record<string, string>[] = Array.isArray(allData)
-        ? allData
-        : allData === true
-            ? Object.keys(bucketReplacement).map(id => ({ id }))
-            : [];
-
-    return experimentsToEvaluate.map(obj => buildUserExperiment(obj, botId)).filter(Boolean);
+export function UserExperiment (allData: Record<string, string>[], botId: string) {
+    try {
+        return allData.map(obj => buildUserExperiment(obj, botId)).filter(x => x);
+    } catch {
+        return [];
+    }
 }
 
 // Cache guild experiments to avoid reading file on every call
