@@ -61,7 +61,7 @@ contextBridge.exposeInMainWorld("BotClientNative", {
             flags: 0,
         };
     },
-    getUserExperiments (allData: boolean, botId: string) {
+    getUserExperiments (allData: Record<string, string>[], botId?: string) {
         return ipcRenderer.sendSync(IPCEvent.GetExperiment, "user", botId, allData);
     },
     getGuildExperiments () {

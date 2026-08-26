@@ -69,7 +69,11 @@ function buildUserExperiment (obj: Record<string, string>, botId: string) {
 }
 
 export function UserExperiment (allData: Record<string, string>[], botId: string) {
-    return allData.map(obj => buildUserExperiment(obj, botId)).filter(x => x);
+    try {
+        return allData.map(obj => buildUserExperiment(obj, botId)).filter(x => x);
+    } catch {
+        return [];
+    }
 }
 
 // Cache guild experiments to avoid reading file on every call
